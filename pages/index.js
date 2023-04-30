@@ -12,7 +12,6 @@ export default function Home() {
       </Head>
       <Header />
       <main className="p-5">
-        <Sidebar />
         <section className="max-w-7xl mx-auto">
           <h1 className="text-5xl max-w-4xl mb-12">
             Create tokengated content experiences for anything

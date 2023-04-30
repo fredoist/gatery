@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { auth, connectWallet } from '@stores/auth.store';
-import { toggleSidebar } from '@stores/sidebar.store';
+import { auth, connectWallet, disconnectWallet } from '@stores/auth.store';
 
 export default function Header() {
   const wallet = auth.use();
@@ -16,9 +15,9 @@ export default function Header() {
           <button
             className="inline-flex gap-1 items-center"
             type="button"
-            onClick={toggleSidebar}
+            onClick={disconnectWallet}
           >
-            <span>My links</span>
+            <span>Log out</span>
           </button>
         ) : (
           <button

@@ -108,7 +108,7 @@ export default function Form() {
           Create gated link
         </button>
       </form>
-      <Tokengate {...fields} />
+      <Tokengate disabled {...fields} />
     </div>
   );
 }

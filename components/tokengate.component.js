@@ -1,7 +1,7 @@
 import { auth, connectWallet } from '@stores/auth.store';
 import { useEffect, useState } from 'react';
 
-export default function Tokengate({ slug, condition, tokens }) {
+export default function Tokengate({ slug, disabled, condition, tokens }) {
   const wallet = auth.use();
   const [isValid, setIsValid] = useState(false);
   const [link, setLink] = useState(null);
@@ -11,6 +11,7 @@ export default function Tokengate({ slug, condition, tokens }) {
   }, [wallet]);
 
   const validate = async () => {
+    if(!tokens.length || !condition || disabled) return;
     try {
       const res = await fetch('/api/validate-gate', {
         method: 'POST',
@@ -25,7 +26,7 @@ export default function Tokengate({ slug, condition, tokens }) {
         alert('You do not own the required tokens');
         return
       }
-      
+
       setLink(link);
     } catch (err) {
       console.log(err);
