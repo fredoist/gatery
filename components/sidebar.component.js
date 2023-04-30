@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { auth } from '@stores/auth.store';
+import { state, toggleSidebar } from '@stores/sidebar.store';
 
 export default function Sidebar() {
   const [gates, setGates] = useState([]);
   const wallet = auth.use();
+  const open = state.use();
+  const asideRef = useRef();
 
   useEffect(() => {
     async function fetchGates() {
@@ -16,7 +19,12 @@ export default function Sidebar() {
   }, [wallet]);
 
   return (
-    <aside className="fixed right-0 inset-y-0 bg-white shadow-xl w-96 z-50 p-8 flex flex-col gap-10 hidden">
+    <aside
+      ref={asideRef}
+      className={`fixed right-0 inset-y-0 bg-white shadow-xl w-96 z-50 p-8 flex flex-col gap-10 ${
+        open ? '-translate-x-0' : 'translate-x-full'
+      } transition-transform duration-100 ease-in`}
+    >
       <div className="flex items-center justify-between">
         <h3>My links</h3>
         <button>Log out</button>
