@@ -1,15 +1,33 @@
 import { useContext } from 'react';
 import { FormContext } from '../context/FormContext';
+import { debounce } from 'debounce';
 
 export default function CreateForm() {
   const { fields, updateField } = useContext(FormContext);
 
   const handleChange = (e) => {
-    updateField(e.target.name, e.target.value);
+    debounce(updateField(e.target.name, e.target.value), 500);
+  }
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const res = await fetch('/api/save-gate', {
+        method: 'POST',
+        body: JSON.stringify(fields),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const { slug } = await res.json();
+      window.location.href = `/${slug}`;
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   return (
-    <form className="max-w-xl flex flex-col gap-4 flex-1">
+    <form className="max-w-xl flex flex-col gap-4 flex-1" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <label htmlFor="link">Locked content link</label>
         <input
@@ -67,10 +85,10 @@ export default function CreateForm() {
           name="tokens"
           value={fields.tokens}
           onChange={handleChange}
-          placeholder="0x1234...5678"
+          placeholder="https://opensea.io/assets/ethereum/0xd774...e6c367/7606"
         />
         <span className="text-xs">
-          Comma-separated list of contracts or OpenSea links
+          Comma-separated list of OpenSea asset links
         </span>
       </div>
       <button className="text-white bg-black py-3 px-6 mt-6" type="submit">
