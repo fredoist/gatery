@@ -1,6 +1,6 @@
 export default function Tokengate({ condition, tokens }) {
   return (
-    <article className="p-5 border border-black/20 shadow-xl max-w-sm w-full flex flex-col gap-2">
+    <article className="p-5 border border-black/20 shadow-xl max-w-sm w-full flex flex-col gap-2 bg-white">
       <header>
         <h3 className="text-lg font-bold mb-4">Holder's exclusive</h3>
         <p className="text-sm">Connect your wallet to unlock this link</p>
