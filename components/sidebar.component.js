@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { auth, disconnectWallet } from '@stores/auth.store';
 import { state, toggleSidebar } from '@stores/sidebar.store';
 import useSWR from 'swr';
-import Link from 'next/link';
 
 export default function Sidebar() {
   const wallet = auth.use();
