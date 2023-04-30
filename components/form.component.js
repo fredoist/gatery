@@ -1,6 +1,7 @@
 import Tokengate from '@components/tokengate.component';
-import { auth, connectWallet } from '@stores/auth.store';
+import { auth } from '@stores/auth.store';
 import { form, handleChange } from '@stores/form.store';
+import { debounce } from 'debounce';
 
 export default function Form() {
   const wallet = auth.use();
@@ -10,7 +11,7 @@ export default function Form() {
     e.preventDefault();
 
     if (!wallet) {
-      return connectWallet();
+      return alert('Please connect your wallet first');
     }
 
     try {
@@ -27,6 +28,14 @@ export default function Form() {
       console.log(err);
     }
   };
+
+  const handleTokenChange = debounce(async (e) => {
+    const { value } = e.target;
+    const req = await fetch(`/api/token-details?tokens=${value}`)
+    const tokens = await req.json();
+    console.log(tokens);
+    form.set({ ...form.get(), tokens })
+  }, 500)
 
   return (
     <div className="flex justify-between gap-8 items-center">
@@ -88,7 +97,7 @@ export default function Form() {
             type="text"
             id="tokens"
             name="tokens"
-            onChange={handleChange}
+            onChange={handleTokenChange}
             placeholder="https://opensea.io/assets/ethereum/0xd774...e6c367/7606"
           />
           <span className="text-xs">
@@ -99,7 +108,7 @@ export default function Form() {
           Create gated link
         </button>
       </form>
-      <Tokengate fields={fields} />
+      <Tokengate {...fields} />
     </div>
   );
 }
