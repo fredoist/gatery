@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const docRef = await db.doc(`gates/${slug}`).get();
     const { link } = docRef.data();
 
-    res.json({ valid, link });
+    res.json({ valid, link: valid ? link : null });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

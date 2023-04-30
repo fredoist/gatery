@@ -5,6 +5,7 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
   const wallet = auth.use();
   const [isValid, setIsValid] = useState(false);
   const [link, setLink] = useState(null);
+  const [hasBeenValidated, setHasBeenValidated] = useState(false);
 
   useEffect(() => {
     if (wallet) validate();
@@ -22,8 +23,8 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
       });
       const { valid, link } = await res.json();
       setIsValid(valid);
+      setHasBeenValidated(true);
       if (!valid) {
-        alert('You do not own the required tokens');
         return;
       }
 
@@ -50,12 +51,30 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
           Proceed to link
         </button>
       ) : (
-        <button
-          className="bg-black text-white py-2 px-4 block w-full"
-          onClick={connectWallet}
-        >
-          Connect wallet
-        </button>
+        <>
+          {!disabled && hasBeenValidated ? (
+            <>
+              <button
+                className="bg-black text-white py-2 px-4 block w-full"
+                onClick={validate}
+              >
+                Try again
+              </button>
+              <span className="text-xs text-red-500 text-center block">
+                Your wallet doesn't hold the required items
+              </span>
+            </>
+          ) : (
+            <button
+              className={`bg-black text-white py-2 px-4 block w-full ${
+                disabled ? 'cursor-not-allowed' : ''
+              }`}
+              onClick={connectWallet}
+            >
+              Connect wallet
+            </button>
+          )}
+        </>
       )}
       <div
         className="h-px border-b border-black/20 w-full my-6 relative before:absolute before:uppercase before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[attr(data-condition)] before:bg-white before:px-4"
