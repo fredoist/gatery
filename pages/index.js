@@ -4,6 +4,7 @@ import GateCard from '../components/GateCard';
 import CreateForm from '../components/CreateForm';
 import { FormContext } from '../context/FormContext';
 import { useContext } from 'react';
+import Sidebar from '../components/Sidebar';
 
 export default function Home() {
   const { fields } = useContext(FormContext);
@@ -16,6 +17,7 @@ export default function Home() {
       </Head>
       <Header />
         <main className="p-5">
+          <Sidebar />
           <section className="max-w-7xl mx-auto">
             <h1 className="text-5xl max-w-4xl mb-12">
               Create tokengated content experiences for anything

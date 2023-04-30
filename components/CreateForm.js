@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { FormContext } from '../context/FormContext';
 import { debounce } from 'debounce';
+import { AuthContext } from '../context/AuthContext';
 
 export default function CreateForm() {
+  const { wallet } = useContext(AuthContext);
   const { fields, updateField } = useContext(FormContext);
 
   const handleChange = (e) => {
@@ -10,11 +12,12 @@ export default function CreateForm() {
   }
 
   const handleSubmit = async (e) => {
+    if (!wallet) return alert('Please connect your wallet first');
     try {
       e.preventDefault();
       const res = await fetch('/api/save-gate', {
         method: 'POST',
-        body: JSON.stringify(fields),
+        body: JSON.stringify({...fields, wallet }),
         headers: {
           'Content-Type': 'application/json',
         }
