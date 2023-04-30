@@ -1,33 +1,32 @@
-import { auth } from '@stores/auth.store';
+import Tokengate from '@components/tokengate.component';
+import { auth, connectWallet } from '@stores/auth.store';
 import { form, handleChange } from '@stores/form.store';
-import Gate from '@components/Gate';
 
-export default function CreateForm() {
-  const wallet = auth.use()
-  const fields = form.use()
+export default function Form() {
+  const wallet = auth.use();
+  const fields = form.use();
 
   const handleSubmit = async (e) => {
-    if(!wallet) {
-      if(!prompt('Sign in with your wallet to save this link for later')) {
-        return;
-      }
+    e.preventDefault();
+
+    if (!wallet) {
+      return connectWallet();
     }
 
     try {
-      e.preventDefault();
       const res = await fetch('/api/save-gate', {
         method: 'POST',
-        body: JSON.stringify({...fields, wallet }),
+        body: JSON.stringify({ ...fields, wallet }),
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
       });
       const { slug } = await res.json();
       window.location.href = `/${slug}`;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <div className="flex justify-between gap-8 items-center">
@@ -58,7 +57,6 @@ export default function CreateForm() {
               hidden
               onChange={handleChange}
               defaultChecked
-              checked={fields.condition === 'any'}
             />
             <label
               className="peer-checked/any:bg-lime-400 py-2 px-3 cursor-pointer"
@@ -74,7 +72,6 @@ export default function CreateForm() {
               value="all"
               onChange={handleChange}
               hidden
-              checked={fields.condition === 'all'}
             />
             <label
               className="peer-checked/all:bg-lime-400 py-2 px-3 cursor-pointer"
@@ -102,7 +99,7 @@ export default function CreateForm() {
           Create gated link
         </button>
       </form>
-      <Gate fields={fields} />
+      <Tokengate fields={fields} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function Gate({ fields }) {
+export default function Tokengate({ fields }) {
   const [tokens, setTokens] = useState([]);
 
   useEffect(() => {
