@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
+import { auth } from '@stores/auth.store';
 
 export default function Sidebar() {
   const [gates, setGates] = useState([]);
-  const { wallet } = useContext(AuthContext);
+  const wallet = auth.use();
 
   useEffect(() => {
     async function fetchGates() {

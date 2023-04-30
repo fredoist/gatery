@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { auth, connectWallet } from '@stores/auth.store';
 
 export default function Header() {
-  const { wallet, connectWallet } = useContext(AuthContext);
+  const wallet = auth.use()
 
   return (
     <header className="py-12">

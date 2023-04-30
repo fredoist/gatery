@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
-import { FormContext } from '../context/FormContext';
+import { useEffect, useState } from 'react';
 
-export default function GateCard({ fields }) {
+export default function Gate({ fields }) {
   const [tokens, setTokens] = useState([]);
 
   useEffect(() => {

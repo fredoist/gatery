@@ -1,14 +1,10 @@
 import Head from 'next/head';
 import Header from '../components/Header';
-import GateCard from '../components/GateCard';
+import GateCard from '../components/Gate';
 import CreateForm from '../components/CreateForm';
-import { FormContext } from '../context/FormContext';
-import { useContext } from 'react';
 import Sidebar from '../components/Sidebar';
 
 export default function Home() {
-  const { fields } = useContext(FormContext);
-
   return (
     <div>
       <Head>
@@ -22,10 +18,7 @@ export default function Home() {
             <h1 className="text-5xl max-w-4xl mb-12">
               Create tokengated content experiences for anything
             </h1>
-            <div className="flex justify-between gap-8 items-center">
-              <CreateForm />
-              <GateCard fields={fields} />
-            </div>
+            <CreateForm />
           </section>
         </main>
     </div>
