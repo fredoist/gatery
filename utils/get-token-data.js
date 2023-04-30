@@ -11,10 +11,10 @@ const options = {
 
 export default async function getTokenData(tokens) {
   try {
-    const tokensArray = tokens.trim().split(',').map((token) => {
+    const tokensArray = tokens.split(',').map((token) => {
       if (token) {
         // remove https://opensea.io/assets/ from token
-        const tokenString = token.split('https://opensea.io/assets/')[1];
+        const tokenString = token.trim().split('https://opensea.io/assets/')[1];
         return tokenString;
       }
       return null;

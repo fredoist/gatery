@@ -13,12 +13,11 @@ export default async function handler(req, res) {
   }
 
   const slug = Math.random().toString(36).substring(2, 16);
-  const tokenDetails = await getTokenData(tokens);
   try {
     await db.doc(`gates/${slug}`).set({
       link,
       condition,
-      tokens: tokenDetails,
+      tokens,
       wallet,
       createdAt: new Date().toISOString(),
     });
