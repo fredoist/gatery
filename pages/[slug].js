@@ -1,10 +1,10 @@
 import Tokengate from '@components/tokengate.component';
 import { db } from '@lib/firestore';
 
-export default function GatedPage({ gate }) {
+export default function GatedPage({ gate, slug }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-lime-400">
-      <Tokengate {...gate} />
+      <Tokengate slug={slug} {...gate} />
     </div>
   );
 }
@@ -21,6 +21,6 @@ export async function getServerSideProps({ params }) {
   }
 
   return {
-    props: { gate },
+    props: { gate, slug },
   };
 }

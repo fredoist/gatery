@@ -1,27 +1,32 @@
 import { auth, connectWallet } from '@stores/auth.store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function Tokengate({ condition, tokens }) {
+export default function Tokengate({ slug, condition, tokens }) {
   const wallet = auth.use();
   const [isValid, setIsValid] = useState(false);
+  const [link, setLink] = useState(null);
 
-  const authAndValidate = async () => {
+  useEffect(() => {
+    if (wallet) validate();
+  }, [wallet]);
+
+  const validate = async () => {
     try {
-      if (!wallet) return connectWallet();
-
       const res = await fetch('/api/validate-gate', {
         method: 'POST',
-        body: JSON.stringify({ wallet, tokens, condition }),
+        body: JSON.stringify({ slug, wallet, tokens, condition }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const { valid } = await res.json();
+      const { valid, link } = await res.json();
       setIsValid(valid);
       if (!valid) {
         alert('You do not own the required tokens');
         return
       }
+      
+      setLink(link);
     } catch (err) {
       console.log(err);
     }
@@ -34,11 +39,13 @@ export default function Tokengate({ condition, tokens }) {
         <p className="text-sm">Connect your wallet to unlock this link</p>
       </header>
       {wallet && isValid ? (
-        <button className="bg-black text-white py-2 px-4 block w-full">
+        <button className="bg-black text-white py-2 px-4 block w-full" onClick={() => {
+          window.location.href = link;
+        }}>
           Proceed to link
         </button>
       ) : (
-        <button className="bg-black text-white py-2 px-4 block w-full" onClick={authAndValidate}>
+        <button className="bg-black text-white py-2 px-4 block w-full" onClick={connectWallet}>
           Connect wallet
         </button>
       )}

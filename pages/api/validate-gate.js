@@ -1,3 +1,5 @@
+import { db } from '@lib/firestore';
+
 const API_URL = `https://api.verbwire.com/v1/nft/data/isWalletHolderOfToken`;
 const API_KEY = process.env.VERBWIRE_API_KEY;
 const options = {
@@ -8,7 +10,7 @@ const options = {
 };
 
 export default async function handler(req, res) {
-  const { wallet, tokens, condition } = req.body;
+  const { slug, wallet, tokens, condition } = req.body;
   try {
     const checkIfOwner = await Promise.all(tokens.map(async ({ tokenId, contractAddress, chain }) => {
       const res = await fetch(
@@ -26,15 +28,14 @@ export default async function handler(req, res) {
       return true;
     }));
 
-    if (condition === 'all') {
-      const valid = checkIfOwner.every((token) => token);
-      return res.status(200).json({ valid });
-    } else if (condition === 'any') {
-      const valid = checkIfOwner.some((token) => token);
-      return res.status(200).json({ valid });
-    } else {
-      return res.status(400).json({ error: 'Invalid condition' });
-    }
+    let valid = false;
+    if (condition === 'all') valid = checkIfOwner.every((token) => token);
+    if (condition === 'any') valid = checkIfOwner.some((token) => token);
+
+    const docRef = await db.doc(`gates/${slug}`).get();
+    const { link } = docRef.data();
+
+    res.json({ valid, link })
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

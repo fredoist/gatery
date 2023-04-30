@@ -1,6 +1,6 @@
-import { entity } from 'simpler-state';
+import { entity, persistence } from 'simpler-state';
 
-export const auth = entity(null);
+export const auth = entity(null, [persistence('auth')]);
 
 export const connectWallet = async () => {
   const accounts = await window.ethereum.request({
