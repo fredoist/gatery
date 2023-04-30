@@ -45,6 +45,7 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
           onClick={() => {
             window.location.href = link;
           }}
+          disabled={!link}
         >
           Proceed to link
         </button>
