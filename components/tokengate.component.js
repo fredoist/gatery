@@ -1,13 +1,47 @@
+import { auth, connectWallet } from '@stores/auth.store';
+import { useState } from 'react';
+
 export default function Tokengate({ condition, tokens }) {
+  const wallet = auth.use();
+  const [isValid, setIsValid] = useState(false);
+
+  const authAndValidate = async () => {
+    try {
+      if (!wallet) return connectWallet();
+
+      const res = await fetch('/api/validate-gate', {
+        method: 'POST',
+        body: JSON.stringify({ wallet, tokens, condition }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const { valid } = await res.json();
+      setIsValid(valid);
+      if (!valid) {
+        alert('You do not own the required tokens');
+        return
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <article className="p-5 border border-black/20 shadow-xl max-w-sm w-full flex flex-col gap-2 bg-white">
       <header>
         <h3 className="text-lg font-bold mb-4">Holder's exclusive</h3>
         <p className="text-sm">Connect your wallet to unlock this link</p>
       </header>
-      <button className="bg-black text-white py-2 px-4 block w-full">
-        Connect wallet
-      </button>
+      {wallet && isValid ? (
+        <button className="bg-black text-white py-2 px-4 block w-full">
+          Proceed to link
+        </button>
+      ) : (
+        <button className="bg-black text-white py-2 px-4 block w-full" onClick={authAndValidate}>
+          Connect wallet
+        </button>
+      )}
       <div
         className="h-px border-b border-black/20 w-full my-6 relative before:absolute before:uppercase before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[attr(data-condition)] before:bg-white before:px-4"
         data-condition={`${condition} of`}
@@ -21,7 +55,7 @@ export default function Tokengate({ condition, tokens }) {
               alt={`${collection} #${tokenId}`}
             />
             <div className="flex flex-col">
-              <strong>{tokenId}</strong>
+              <strong>#{tokenId}</strong>
               <span>{collection}</span>
             </div>
           </div>
