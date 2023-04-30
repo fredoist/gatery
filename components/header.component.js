@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { auth, connectWallet, disconnectWallet } from '@stores/auth.store';
+import Sidebar from './sidebar.component';
+import { toggleSidebar } from '@stores/sidebar.store';
 
 export default function Header() {
   const wallet = auth.use();
@@ -12,13 +14,16 @@ export default function Header() {
           <span className="font-bold">Gatery</span>
         </Link>
         {wallet ? (
-          <button
-            className="inline-flex gap-1 items-center"
-            type="button"
-            onClick={disconnectWallet}
-          >
-            <span>Log out</span>
-          </button>
+          <>
+            <Sidebar />
+            <button
+              className="inline-flex gap-1 items-center"
+              type="button"
+              onClick={toggleSidebar}
+            >
+              <span>My links</span>
+            </button>
+          </>
         ) : (
           <button
             className="inline-flex gap-1 items-center"

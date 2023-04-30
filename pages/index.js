@@ -1,6 +1,5 @@
 import Form from '@components/form.component';
 import Header from '@components/header.component';
-import Sidebar from '@components/sidebar.component';
 import Head from 'next/head';
 
 export default function Home() {
