@@ -11,7 +11,7 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
   }, [wallet]);
 
   const validate = async () => {
-    if(!tokens.length || !condition || disabled) return;
+    if (!tokens.length || !condition || disabled) return;
     try {
       const res = await fetch('/api/validate-gate', {
         method: 'POST',
@@ -24,7 +24,7 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
       setIsValid(valid);
       if (!valid) {
         alert('You do not own the required tokens');
-        return
+        return;
       }
 
       setLink(link);
@@ -76,13 +76,10 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
         ))
       ) : (
         <div className="flex gap-4 motion-safe:animate-pulse">
-          <img
-            className="w-12 h-12 bg-gray-300"
-            alt=""
-          />
+          <img className="w-12 h-12 bg-gray-300" alt="" />
           <div className="flex flex-col gap-2">
-            <strong className='block w-16 h-5 bg-gray-300'></strong>
-            <span className='block w-24 h-4 bg-gray-300'></span>
+            <strong className="block w-16 h-5 bg-gray-300"></strong>
+            <span className="block w-24 h-4 bg-gray-300"></span>
           </div>
         </div>
       )}
