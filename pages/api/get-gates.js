@@ -1,4 +1,4 @@
-import { db } from '../../lib/firestore';
+import { db } from '@lib/firestore';
 
 export default async function (req, res) {
   const { wallet } = req.query;
