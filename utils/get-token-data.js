@@ -23,9 +23,12 @@ export default async function getTokenData(tokens) {
       tokensArray
         .map(async (token) => {
           if (token) {
-            const chain = token.split('/')[0];
+            let chain = token.split('/')[0];
             const contractAddress = token.split('/')[1];
             const tokenId = token.split('/')[2];
+
+            if (chain === 'ethereum') chain = 'ethereum';
+            if (chain === 'matic') chain = 'polygon';
 
             const response = await fetch(
               `${API_URL}?chain=${chain}&contractAddress=${contractAddress}&tokenId=${tokenId}`,
@@ -35,7 +38,9 @@ export default async function getTokenData(tokens) {
             const nft = await fetch(fixIFPSUrl(data.tokenURI));
             const { image } = await nft.json();
             return {
-              tokenId: tokenId,
+              chain,
+              tokenId,
+              contractAddress,
               collection: data.name,
               image: fixIFPSUrl(image),
             };
