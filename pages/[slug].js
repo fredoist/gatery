@@ -7,6 +7,7 @@ export default function GatedPage({ gate, slug }) {
     <div className="flex items-center justify-center min-h-screen bg-lime-400">
       <Head>
         <title>Holder's exclusive content</title>
+        <link rel="icon" href="/gatery.svg" type="image/svg+xml" />
       </Head>
       <Tokengate slug={slug} {...gate} />
     </div>
