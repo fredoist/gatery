@@ -1,6 +1,7 @@
 <p align="center">
   <img src="public/gatery.svg">
   <h3 align="center">Gatery</h3>
+  <p align="center">Create tokengated content experiences for anything</p>
   <p align="center">
     <a href="https://devpost.com/software/gatery">
       <img src="https://img.shields.io/badge/Devpost-100000?style=for-the-badge&logo=Devpost&logoColor=white&labelColor=black&color=black">
