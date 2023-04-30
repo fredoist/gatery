@@ -40,13 +40,19 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
         <p className="text-sm">Connect your wallet to unlock this link</p>
       </header>
       {wallet && isValid ? (
-        <button className="bg-black text-white py-2 px-4 block w-full" onClick={() => {
-          window.location.href = link;
-        }}>
+        <button
+          className="bg-black text-white py-2 px-4 block w-full"
+          onClick={() => {
+            window.location.href = link;
+          }}
+        >
           Proceed to link
         </button>
       ) : (
-        <button className="bg-black text-white py-2 px-4 block w-full" onClick={connectWallet}>
+        <button
+          className="bg-black text-white py-2 px-4 block w-full"
+          onClick={connectWallet}
+        >
           Connect wallet
         </button>
       )}
@@ -54,7 +60,7 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
         className="h-px border-b border-black/20 w-full my-6 relative before:absolute before:uppercase before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[attr(data-condition)] before:bg-white before:px-4"
         data-condition={`${condition} of`}
       />
-      {tokens.length > 0 &&
+      {tokens.length > 0 ? (
         tokens?.map(({ image, collection, tokenId }) => (
           <div className="flex gap-4" key={tokenId}>
             <img
@@ -67,7 +73,19 @@ export default function Tokengate({ slug, disabled, condition, tokens }) {
               <span>{collection}</span>
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="flex gap-4 motion-safe:animate-pulse">
+          <img
+            className="w-12 h-12 bg-gray-300"
+            alt=""
+          />
+          <div className="flex flex-col gap-2">
+            <strong className='block w-16 h-5 bg-gray-300'></strong>
+            <span className='block w-24 h-4 bg-gray-300'></span>
+          </div>
+        </div>
+      )}
     </article>
   );
 }

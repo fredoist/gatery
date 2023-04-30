@@ -52,6 +52,7 @@ export default function Form() {
             name="link"
             onChange={handleChange}
             placeholder="https://www.dropbox.com/s/g0rb22icw0va10u/file.zip?dl=0"
+            required
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -99,6 +100,7 @@ export default function Form() {
             name="tokens"
             onChange={handleTokenChange}
             placeholder="https://opensea.io/assets/ethereum/0xd774...e6c367/7606"
+            required
           />
           <span className="text-xs">
             Comma-separated list of OpenSea asset links
