@@ -1,22 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import { auth } from '@stores/auth.store';
+import { useEffect, useRef } from 'react';
+import { auth, disconnectWallet } from '@stores/auth.store';
 import { state, toggleSidebar } from '@stores/sidebar.store';
+import useSWR from 'swr';
 
 export default function Sidebar() {
-  const [gates, setGates] = useState([]);
   const wallet = auth.use();
+  const { data } = useSWR(`/api/get-gates?wallet=${wallet}`);
   const open = state.use();
   const asideRef = useRef();
 
   useEffect(() => {
-    async function fetchGates() {
-      const response = await fetch(`/api/get-gates?wallet=${wallet}`);
-      const data = await response.json();
-      setGates(data);
-      console.log(data);
+    function handleClickOutside(event) {
+      if (
+        asideRef.current &&
+        !asideRef.current.contains(event.target) &&
+        open
+      ) {
+        toggleSidebar();
+      }
     }
-    fetchGates();
-  }, [wallet]);
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open]);
 
   return (
     <aside
@@ -27,28 +34,35 @@ export default function Sidebar() {
     >
       <div className="flex items-center justify-between">
         <h3>My links</h3>
-        <button>Log out</button>
+        <button onClick={disconnectWallet}>Log out</button>
       </div>
-      <div className="flex-1 overflow-y-auto">
-        <article className="p-4 border border-black/20">
-          <h4 className="leading-none">GATE_ID</h4>
-          <span className="text-xs">GATE_LINK</span>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="uppercase">GATE_CONDITION</span>
-            <div className="flex -space-x-2">
-              <img
-                src="https://ipfs.io/ipfs/QmS8ToohXJLrmYEN8uduXfVMoofwBRkN9tguufvhCzVkBj"
-                className="w-6 rounded-full"
-                alt=""
-              />
-              <img
-                src="https://wonderpals.mypinata.cloud/ipfs/QmYh6fia5KZTQ2EAGkDtKGGEpSMNMNdHU8qnZa4ttp9t11"
-                className="w-6 rounded-full"
-                alt=""
-              />
-            </div>
-          </div>
-        </article>
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4">
+        {data &&
+          data?.map(({ id, link, condition, tokens }) => (
+            <article className="p-4 border border-black/20" key={id}>
+              <a
+                href={`/${id}`}
+                target="_blank"
+                className="leading-none text-sm font-bold"
+              >
+                /{id}
+              </a>
+              <span className="text-xs block truncate">{link}</span>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="uppercase text-xs">{condition} of</span>
+                <div className="flex -space-x-2">
+                  {tokens.map(({ image, collection, tokenId }) => (
+                    <img
+                      src={image}
+                      className="w-5 h-5 rounded-full"
+                      alt={`${collection} #${tokenId}`}
+                      title={`${collection} #${tokenId}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </article>
+          ))}
       </div>
     </aside>
   );

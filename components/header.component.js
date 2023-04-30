@@ -1,8 +1,16 @@
 import Link from 'next/link';
-import { auth, connectWallet, disconnectWallet } from '@stores/auth.store';
+import { auth, connectWallet } from '@stores/auth.store';
+import Sidebar from './sidebar.component';
+import { toggleSidebar } from '@stores/sidebar.store';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
   const wallet = auth.use();
+  const [isAuthed, setIsAuthed] = useState(false);
+  
+  useEffect(() => {
+    setIsAuthed(wallet);
+  }, [wallet]);
 
   return (
     <header className="py-12">
@@ -11,14 +19,17 @@ export default function Header() {
           <img src="/gatery.svg" alt="Gatery" className="w-6 h-6" />
           <span className="font-bold">Gatery</span>
         </Link>
-        {wallet ? (
-          <button
-            className="inline-flex gap-1 items-center"
-            type="button"
-            onClick={disconnectWallet}
-          >
-            <span>Log out</span>
-          </button>
+        {isAuthed ? (
+          <>
+            <Sidebar />
+            <button
+              className="inline-flex gap-1 items-center"
+              type="button"
+              onClick={toggleSidebar}
+            >
+              <span>My links</span>
+            </button>
+          </>
         ) : (
           <button
             className="inline-flex gap-1 items-center"

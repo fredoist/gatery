@@ -1,4 +1,3 @@
-import getTokenData from '@utils/get-token-data';
 import { db } from '@lib/firestore';
 
 export default async function handler(req, res) {

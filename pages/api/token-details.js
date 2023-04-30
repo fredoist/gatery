@@ -1,4 +1,4 @@
-import getTokenData from '@utils/get-token-data';
+import getTokenData from '@lib/verbwire';
 
 export default async function handler(req, res) {
   const { tokens } = req.query;
